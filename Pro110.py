@@ -1,31 +1,37 @@
-import plotly.figure_factory as ff 
-import plotly.graph_objects as go
+import plotly.figure_factory as ff
+import statistics
 import random
 import pandas as pd
-import csv 
-import statistics 
+import csv
 
-f = pd.read_csv("Pro110 - Data.csv")
-data = f["claps"].tolist()
+df = pd.read_csv("Pro110 - Data.csv")
+data = df["claps"].tolist()
+fig = ff.create_distplot([data], ["claps"], show_hist=False)
+fig.show()
+print("The Population mean:- ",statistics.mean(data))
 
+def random_set_of_mean(counter):
+    dataset = []
+    for i in range(0, counter):
+        random_index= random.randint(0,len(data))
+        value = data[random_index]
+        dataset.append(value)
+    mean = statistics.mean(dataset)
+    return mean
 
+def show_fig(mean_list):
+    df = mean_list
+    fig = ff.create_distplot([df], ["claps"], show_hist=False)
+    fig.show()
 
-
-dataSet = []
-for i in range(0,100):
-    randomIndex = random.randint(0,len(data))
-    value = data[randomIndex]
-    dataSet.append(value)
-
-mean = statistics.mean(dataSet)
-median = statistics.median(dataSet)
-std_deviation = statistics.stdev(dataSet)
-
-print(mean , median , std_deviation)
-
-figure = ff.create_distplot([dataSet],["claps"],show_hist= False)
-figure.add_trace(go.Scatter(x = [mean,mean], y = [0,1] , mode = "lines" , name = "Mean" ))
-figure.show()
+def setup():
+    mean_list = []
+    for i in range(0,100):
+        set_of_means= random_set_of_mean(10)
+        mean_list.append(set_of_means)
+    show_fig(mean_list)
+    print("The sampling mean:- ", statistics.mean(mean_list))
+setup()
 
 
 
